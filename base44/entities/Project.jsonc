@@ -1,0 +1,43 @@
+{
+  "name": "Project",
+  "type": "object",
+  "properties": {
+    "projectName": {
+      "type": "string",
+      "description": "Nombre del proyecto"
+    },
+    "boxType": {
+      "type": "object",
+      "description": "Configuraci\u00f3n del tipo de caja"
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "alto": {
+          "type": "number"
+        },
+        "ancho": {
+          "type": "number"
+        },
+        "profundidad": {
+          "type": "number"
+        }
+      },
+      "description": "Dimensiones del libro en mm"
+    },
+    "material": {
+      "type": "object",
+      "description": "Material seleccionado"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notas adicionales sobre el proyecto"
+    }
+  },
+  "required": [
+    "projectName",
+    "dimensions",
+    "boxType",
+    "material"
+  ]
+}

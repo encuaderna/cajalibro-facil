@@ -8,6 +8,7 @@ import BoxSchemaSVG from "@/components/box-designer/BoxSchemaSVG";
 import BoxViewer3D from "@/components/box-designer/BoxViewer3D";
 import SheetOptimizer from "@/components/box-designer/SheetOptimizer";
 import CostEstimator from "@/components/box-designer/CostEstimator";
+import SaveProjectDialog from "@/components/box-designer/SaveProjectDialog";
 import jsPDF from "jspdf";
 
 export default function StepResults({
@@ -31,6 +32,7 @@ export default function StepResults({
     instructions.map(() => false)
   );
   const [selectedPieceIndex, setSelectedPieceIndex] = useState(0);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
 
   const toggleCheck = (i) => {
     setChecked((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
@@ -243,6 +245,9 @@ export default function StepResults({
           <ArrowLeft className="mr-2 h-4 w-4" />
           Atrás
         </Button>
+        <Button onClick={() => setSaveDialogOpen(true)} className="h-12 px-8 text-base font-medium bg-primary/90 hover:bg-primary">
+          💾 Guardar proyecto
+        </Button>
         <Button onClick={handleExportPDF} className="h-12 px-8 text-base font-medium">
           <Download className="mr-2 h-4 w-4" />
           Exportar PDF
@@ -252,6 +257,18 @@ export default function StepResults({
           Nuevo diseño
         </Button>
       </div>
+
+      {/* Save project dialog */}
+      <SaveProjectDialog
+        open={saveDialogOpen}
+        onOpenChange={setSaveDialogOpen}
+        dimensions={dimensions}
+        boxType={boxType}
+        material={material}
+        onSuccess={() => {
+          setSaveDialogOpen(false);
+        }}
+      />
     </div>
   );
 }
