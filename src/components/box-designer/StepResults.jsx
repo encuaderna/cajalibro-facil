@@ -10,6 +10,7 @@ import SheetOptimizer from "@/components/box-designer/SheetOptimizer";
 import CostEstimator from "@/components/box-designer/CostEstimator";
 import SaveProjectDialog from "@/components/box-designer/SaveProjectDialog";
 import InteractiveSheetLayout from "@/components/box-designer/InteractiveSheetLayout";
+import MultiSheetManager from "@/components/box-designer/MultiSheetManager";
 import jsPDF from "jspdf";
 
 export default function StepResults({
@@ -194,8 +195,13 @@ export default function StepResults({
         </p>
       </div>
 
-      {/* ── Optimización de corte ── */}
+      {/* ── Distribución en múltiples láminas ── */}
       <div className="mt-6">
+        <MultiSheetManager pieces={pieces} />
+      </div>
+
+      {/* ── Optimización de corte ── */}
+      <div className="mt-4">
         <SheetOptimizer pieces={pieces} />
       </div>
 
