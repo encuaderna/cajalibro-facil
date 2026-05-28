@@ -5,6 +5,7 @@ import { ArrowLeft, Download, AlertTriangle, RotateCcw } from "lucide-react";
 import { calculatePieces, getInstructions } from "@/lib/boxCalculations";
 import PieceDiagram from "@/components/box-designer/PieceDiagram";
 import BoxSchemaSVG from "@/components/box-designer/BoxSchemaSVG";
+import BoxViewer3D from "@/components/box-designer/BoxViewer3D";
 import jsPDF from "jspdf";
 
 export default function StepResults({
@@ -126,8 +127,13 @@ export default function StepResults({
         </div>
       )}
 
+      {/* ── Visor 3D ── */}
+      <div className="mt-6">
+        <BoxViewer3D boxType={boxType} dimensions={dimensions} material={material} />
+      </div>
+
       {/* ── Visualización SVG ── */}
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Esquema isométrico de la caja */}
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-xs font-medium text-muted-foreground mb-3 uppercase tracking-wide">
