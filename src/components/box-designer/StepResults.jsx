@@ -7,6 +7,7 @@ import PieceDiagram from "@/components/box-designer/PieceDiagram";
 import BoxSchemaSVG from "@/components/box-designer/BoxSchemaSVG";
 import BoxViewer3D from "@/components/box-designer/BoxViewer3D";
 import SheetOptimizer from "@/components/box-designer/SheetOptimizer";
+import CostEstimator from "@/components/box-designer/CostEstimator";
 import jsPDF from "jspdf";
 
 export default function StepResults({
@@ -193,6 +194,11 @@ export default function StepResults({
       {/* ── Optimización de corte ── */}
       <div className="mt-6">
         <SheetOptimizer pieces={pieces} />
+      </div>
+
+      {/* ── Estimación de coste ── */}
+      <div className="mt-4">
+        <CostEstimator pieces={pieces} />
       </div>
 
       {/* Instrucciones */}
