@@ -9,6 +9,7 @@ import BoxViewer3D from "@/components/box-designer/BoxViewer3D";
 import SheetOptimizer from "@/components/box-designer/SheetOptimizer";
 import CostEstimator from "@/components/box-designer/CostEstimator";
 import SaveProjectDialog from "@/components/box-designer/SaveProjectDialog";
+import InteractiveSheetLayout from "@/components/box-designer/InteractiveSheetLayout";
 import jsPDF from "jspdf";
 
 export default function StepResults({
@@ -201,6 +202,11 @@ export default function StepResults({
       {/* ── Estimación de coste ── */}
       <div className="mt-4">
         <CostEstimator pieces={pieces} />
+      </div>
+
+      {/* ── Editor interactivo 2D ── */}
+      <div className="mt-4">
+        <InteractiveSheetLayout pieces={pieces} sheetW={1000} sheetH={700} />
       </div>
 
       {/* Instrucciones */}
