@@ -24,6 +24,7 @@ export default function SaveProjectDialog({
 }) {
   const [projectName, setProjectName] = useState("");
   const [notes, setNotes] = useState("");
+  const [revisionNotes, setRevisionNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -37,17 +38,57 @@ export default function SaveProjectDialog({
     setError("");
 
     try {
-      await base44.entities.Project.create({
-        projectName: projectName.trim(),
-        dimensions,
-        boxType,
-        material,
-        notes: notes.trim(),
-      });
+      // Crear o actualizar proyecto
+      const existingProject = await base44.entities.Project.filter(
+        { projectName: projectName.trim() }
+      ).then((results) => results[0] || null);
+
+      let projectId;
+
+      if (existingProject) {
+        // Actualizar proyecto existente
+        await base44.entities.Project.update(existingProject.id, {
+          dimensions,
+          boxType,
+          material,
+          notes: notes.trim(),
+        });
+        projectId = existingProject.id;
+      } else {
+        // Crear nuevo proyecto
+        const newProject = await base44.entities.Project.create({
+          projectName: projectName.trim(),
+          dimensions,
+          boxType,
+          material,
+          notes: notes.trim(),
+        });
+        projectId = newProject.id;
+      }
+
+      // Crear revisión
+      if (projectId) {
+        const revisions = await base44.entities.ProjectRevision.filter(
+          { projectId },
+          "-revisionNumber",
+          1
+        );
+        const nextRevisionNumber = (revisions[0]?.revisionNumber || 0) + 1;
+
+        await base44.entities.ProjectRevision.create({
+          projectId,
+          revisionNumber: nextRevisionNumber,
+          dimensions,
+          boxType,
+          material,
+          revisionNotes: revisionNotes.trim(),
+        });
+      }
 
       onSuccess?.();
       setProjectName("");
       setNotes("");
+      setRevisionNotes("");
       onOpenChange(false);
     } catch (err) {
       setError("Error al guardar el proyecto. Intenta de nuevo.");
@@ -87,7 +128,7 @@ export default function SaveProjectDialog({
 
           <div className="space-y-2">
             <Label htmlFor="project-notes" className="text-sm font-medium">
-              Notas (opcional)
+              Notas del proyecto (opcional)
             </Label>
             <Textarea
               id="project-notes"
@@ -95,7 +136,21 @@ export default function SaveProjectDialog({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               disabled={saving}
-              className="h-20 resize-none"
+              className="h-16 resize-none"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="revision-notes" className="text-sm font-medium">
+              Notas de la revisión (opcional)
+            </Label>
+            <Textarea
+              id="revision-notes"
+              placeholder="Ej: Aumenté el alto para ajustar al formato A4..."
+              value={revisionNotes}
+              onChange={(e) => setRevisionNotes(e.target.value)}
+              disabled={saving}
+              className="h-16 resize-none"
             />
           </div>
 

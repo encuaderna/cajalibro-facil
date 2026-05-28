@@ -13,7 +13,8 @@ import {
   AlertDialogTitle,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Trash2, Play, Loader2, FolderOpen } from "lucide-react";
+import { ArrowLeft, Trash2, Play, Loader2, FolderOpen, Clock } from "lucide-react";
+import RevisionHistory from "@/components/box-designer/RevisionHistory";
 
 export default function MyProjects() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function MyProjects() {
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [restoringProjectId, setRestoringProjectId] = useState(null);
 
   useEffect(() => {
     loadProjects();
@@ -41,6 +43,18 @@ export default function MyProjects() {
   const handleLoad = (project) => {
     // Guardar proyecto en sessionStorage para recuperar en Home
     sessionStorage.setItem("loadedProject", JSON.stringify(project));
+    navigate("/");
+  };
+
+  const handleRestoreRevision = (projectId, restoredData) => {
+    // Actualizar el proyecto con los datos restaurados
+    sessionStorage.setItem(
+      "loadedProject",
+      JSON.stringify({
+        id: projectId,
+        ...restoredData,
+      })
+    );
     navigate("/");
   };
 
@@ -134,20 +148,24 @@ export default function MyProjects() {
                     )}
                   </div>
 
-                  <div className="flex gap-2 sm:flex-col shrink-0">
+                  <div className="flex flex-col gap-2 shrink-0">
                     <Button
                       onClick={() => handleLoad(project)}
-                      className="flex-1 sm:flex-none"
+                      className="w-full sm:w-auto"
                       size="sm"
                     >
                       <Play className="h-4 w-4 mr-2" />
                       Cargar
                     </Button>
+                    <RevisionHistory
+                      projectId={project.id}
+                      onRestore={(data) => handleRestoreRevision(project.id, data)}
+                    />
                     <Button
                       onClick={() => setDeleteId(project.id)}
                       variant="destructive"
                       size="sm"
-                      className="flex-1 sm:flex-none"
+                      className="w-full sm:w-auto"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

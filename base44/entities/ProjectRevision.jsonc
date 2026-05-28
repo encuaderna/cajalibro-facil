@@ -1,0 +1,48 @@
+{
+  "name": "ProjectRevision",
+  "type": "object",
+  "properties": {
+    "projectId": {
+      "type": "string",
+      "description": "ID del proyecto al que pertenece esta revisi\u00f3n"
+    },
+    "revisionNumber": {
+      "type": "number",
+      "description": "N\u00famero secuencial de la revisi\u00f3n"
+    },
+    "boxType": {
+      "type": "object",
+      "description": "Configuraci\u00f3n del tipo de caja"
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "alto": {
+          "type": "number"
+        },
+        "ancho": {
+          "type": "number"
+        },
+        "profundidad": {
+          "type": "number"
+        }
+      },
+      "description": "Dimensiones del libro en mm"
+    },
+    "material": {
+      "type": "object",
+      "description": "Material seleccionado"
+    },
+    "revisionNotes": {
+      "type": "string",
+      "description": "Notas sobre los cambios en esta revisi\u00f3n"
+    }
+  },
+  "required": [
+    "projectId",
+    "revisionNumber",
+    "dimensions",
+    "boxType",
+    "material"
+  ]
+}
