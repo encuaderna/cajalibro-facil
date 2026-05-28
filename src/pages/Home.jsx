@@ -2,16 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import AccessibilityToolbar from "@/components/AccessibilityToolbar";
+import AppHeader from "@/components/AppHeader";
+import Welcome from "@/pages/Welcome";
 import MaterialLibrary from "@/components/box-designer/MaterialLibrary";
 import StepIndicator from "@/components/box-designer/StepIndicator";
 import StepDimensions from "@/components/box-designer/StepDimensions";
 import StepBoxType from "@/components/box-designer/StepBoxType";
 import StepMaterial from "@/components/box-designer/StepMaterial";
 import StepResults from "@/components/box-designer/StepResults";
+import { useAppPreferences } from "@/hooks/useAppPreferences";
 
 const INITIAL_DIMENSIONS = { alto: 0, ancho: 0, profundidad: 0 };
 
 export default function Home() {
+  const { prefs, isLoaded } = useAppPreferences();
+  const [showWelcome, setShowWelcome] = useState(() => {
+    return localStorage.getItem('app_welcome_shown') !== 'true';
+  });
   const [step, setStep] = useState(1);
   const [dimensions, setDimensions] = useState(INITIAL_DIMENSIONS);
   const [boxType, setBoxType] = useState(null);
@@ -41,8 +48,34 @@ export default function Home() {
     setMaterial(null);
   };
 
+  const handleWelcomeComplete = () => {
+    localStorage.setItem('app_welcome_shown', 'true');
+    setShowWelcome(false);
+  };
+
+  if (!isLoaded) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-background">
+        <div className="w-8 h-8 border-4 border-border border-t-primary rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (showWelcome) {
+    return <Welcome onGetStarted={handleWelcomeComplete} />;
+  }
+
   return (
-    <div className="min-h-screen bg-background">
+    <div 
+      className="min-h-screen bg-background transition-all duration-300"
+      style={{
+        fontFamily: prefs.dyslexicFont ? "'OpenDyslexic', sans-serif" : 'inherit',
+        filter: prefs.highContrast ? 'contrast(1.5) saturate(0.8)' : 'none',
+        fontSize: `${prefs.textScale}rem`,
+        opacity: prefs.focusMode ? 0.95 : 1,
+      }}
+    >
+      <AppHeader />
       <AccessibilityToolbar />
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
         {/* Header */}
