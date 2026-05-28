@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Download, AlertTriangle, RotateCcw } from "lucide-react";
 import { calculatePieces, getInstructions } from "@/lib/boxCalculations";
+import PieceDiagram from "@/components/box-designer/PieceDiagram";
+import BoxSchemaSVG from "@/components/box-designer/BoxSchemaSVG";
 import jsPDF from "jspdf";
 
 export default function StepResults({
@@ -25,6 +27,7 @@ export default function StepResults({
   const [checked, setChecked] = useState(() =>
     instructions.map(() => false)
   );
+  const [selectedPieceIndex, setSelectedPieceIndex] = useState(0);
 
   const toggleCheck = (i) => {
     setChecked((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
@@ -123,6 +126,25 @@ export default function StepResults({
         </div>
       )}
 
+      {/* ── Visualización SVG ── */}
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Esquema isométrico de la caja */}
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-xs font-medium text-muted-foreground mb-3 uppercase tracking-wide">
+            Esquema de la caja
+          </p>
+          <BoxSchemaSVG boxType={boxType} highlightedPiece={pieces[selectedPieceIndex]} />
+        </div>
+
+        {/* Diagrama acotado de la pieza seleccionada */}
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-xs font-medium text-muted-foreground mb-3 uppercase tracking-wide">
+            Pieza seleccionada — vista de corte
+          </p>
+          <PieceDiagram piece={pieces[selectedPieceIndex]} highlighted />
+        </div>
+      </div>
+
       {/* Tabla de piezas */}
       <div className="mt-6 overflow-x-auto">
         <table className="w-full text-sm" role="table">
@@ -136,8 +158,19 @@ export default function StepResults({
           </thead>
           <tbody>
             {pieces.map((p, i) => (
-              <tr key={i} className="border-b border-border/50">
-                <td className="py-3 px-3 text-foreground font-medium">{p.name}</td>
+              <tr
+                key={i}
+                onClick={() => setSelectedPieceIndex(i)}
+                className={`border-b border-border/50 cursor-pointer transition-colors ${
+                  selectedPieceIndex === i
+                    ? "bg-primary/8 border-l-2 border-l-primary"
+                    : "hover:bg-secondary/60"
+                }`}
+                aria-selected={selectedPieceIndex === i}
+              >
+                <td className={`py-3 px-3 font-medium ${selectedPieceIndex === i ? "text-primary" : "text-foreground"}`}>
+                  {p.name}
+                </td>
                 <td className="py-3 px-3 text-muted-foreground">{p.description}</td>
                 <td className="py-3 px-3 text-center text-foreground">{p.qty}</td>
                 <td className="py-3 px-3 text-right font-mono text-foreground">{p.finalMeasure}</td>
@@ -145,6 +178,9 @@ export default function StepResults({
             ))}
           </tbody>
         </table>
+        <p className="text-xs text-muted-foreground mt-2 pl-1">
+          Haz clic en una fila para ver el diagrama de esa pieza.
+        </p>
       </div>
 
       {/* Instrucciones */}
