@@ -1,0 +1,203 @@
+import React, { useState, useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ArrowLeft, Download, AlertTriangle, RotateCcw } from "lucide-react";
+import { calculatePieces, getInstructions } from "@/lib/boxCalculations";
+import jsPDF from "jspdf";
+
+export default function StepResults({
+  dimensions,
+  boxType,
+  material,
+  onBack,
+  onReset,
+}) {
+  const { pieces, needsAngleCut } = useMemo(
+    () => calculatePieces(dimensions, boxType, material),
+    [dimensions, boxType, material]
+  );
+
+  const instructions = useMemo(
+    () => getInstructions(boxType, material),
+    [boxType, material]
+  );
+
+  const [checked, setChecked] = useState(() =>
+    instructions.map(() => false)
+  );
+
+  const toggleCheck = (i) => {
+    setChecked((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
+  };
+
+  const handleExportPDF = () => {
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    let y = 20;
+
+    doc.setFontSize(16);
+    doc.text("Diseño Técnico — Caja para Libro", 15, y);
+    y += 12;
+
+    doc.setFontSize(10);
+    doc.text(`Libro: ${dimensions.alto} × ${dimensions.ancho} × ${dimensions.profundidad} mm`, 15, y);
+    y += 6;
+    doc.text(`Tipo: ${boxType.name}`, 15, y);
+    y += 6;
+    doc.text(`Material: ${material.name} (${material.thickness} mm)`, 15, y);
+    y += 12;
+
+    // Table header
+    doc.setFontSize(11);
+    doc.text("Tabla de Corte", 15, y);
+    y += 8;
+
+    doc.setFontSize(9);
+    const cols = [15, 65, 105, 135];
+    doc.setFont(undefined, "bold");
+    doc.text("Pieza", cols[0], y);
+    doc.text("Descripción", cols[1], y);
+    doc.text("Cantidad", cols[2], y);
+    doc.text("Medida Final", cols[3], y);
+    y += 2;
+    doc.line(15, y, pageWidth - 15, y);
+    y += 5;
+
+    doc.setFont(undefined, "normal");
+    pieces.forEach((p) => {
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.text(p.name, cols[0], y);
+      doc.text(p.description, cols[1], y);
+      doc.text(String(p.qty), cols[2], y);
+      doc.text(p.finalMeasure, cols[3], y);
+      y += 6;
+    });
+
+    if (needsAngleCut) {
+      y += 6;
+      doc.setFont(undefined, "bold");
+      doc.text(`ALERTA: Cortar aristas a 45° (grosor > 3 mm).`, 15, y);
+      doc.setFont(undefined, "normal");
+      y += 8;
+    }
+
+    y += 6;
+    doc.setFontSize(11);
+    doc.text("Instrucciones de Montaje", 15, y);
+    y += 8;
+
+    doc.setFontSize(9);
+    instructions.forEach((inst, i) => {
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
+      const lines = doc.splitTextToSize(`${i + 1}. ${inst}`, pageWidth - 30);
+      doc.text(lines, 15, y);
+      y += lines.length * 5 + 2;
+    });
+
+    doc.save(`caja-${boxType.id}-${Date.now()}.pdf`);
+  };
+
+  return (
+    <div>
+      <h2 className="text-xl font-semibold text-foreground mb-2">
+        Paso 4 — Resultados de Cálculo
+      </h2>
+      <p className="text-muted-foreground text-sm mb-2">
+        Libro: {dimensions.alto} × {dimensions.ancho} × {dimensions.profundidad} mm
+        &nbsp;·&nbsp; {boxType.name} &nbsp;·&nbsp; {material.name} ({material.thickness} mm)
+      </p>
+
+      {needsAngleCut && (
+        <div className="flex items-start gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/30 mt-4 mb-6">
+          <AlertTriangle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
+          <p className="text-sm text-destructive">
+            El grosor del material ({material.thickness} mm) supera los 3 mm.
+            Se requiere corte a 45° en todas las aristas de unión.
+          </p>
+        </div>
+      )}
+
+      {/* Tabla de piezas */}
+      <div className="mt-6 overflow-x-auto">
+        <table className="w-full text-sm" role="table">
+          <thead>
+            <tr className="border-b border-border">
+              <th className="text-left py-3 px-3 font-medium text-muted-foreground">Pieza</th>
+              <th className="text-left py-3 px-3 font-medium text-muted-foreground">Descripción</th>
+              <th className="text-center py-3 px-3 font-medium text-muted-foreground">Cant.</th>
+              <th className="text-right py-3 px-3 font-medium text-muted-foreground">Medida Final</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pieces.map((p, i) => (
+              <tr key={i} className="border-b border-border/50">
+                <td className="py-3 px-3 text-foreground font-medium">{p.name}</td>
+                <td className="py-3 px-3 text-muted-foreground">{p.description}</td>
+                <td className="py-3 px-3 text-center text-foreground">{p.qty}</td>
+                <td className="py-3 px-3 text-right font-mono text-foreground">{p.finalMeasure}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Instrucciones */}
+      <div className="mt-10">
+        <h3 className="text-lg font-semibold text-foreground mb-4">
+          Instrucciones de montaje
+        </h3>
+        <ol className="space-y-3">
+          {instructions.map((inst, i) => {
+            const isAlert = inst.startsWith("ALERTA");
+            return (
+              <li key={i} className="flex items-start gap-3">
+                <div className="mt-0.5 shrink-0">
+                  <Checkbox
+                    id={`step-${i}`}
+                    checked={checked[i]}
+                    onCheckedChange={() => toggleCheck(i)}
+                    className="h-5 w-5"
+                  />
+                </div>
+                <label
+                  htmlFor={`step-${i}`}
+                  className={`text-sm leading-relaxed cursor-pointer ${
+                    isAlert
+                      ? "text-destructive font-medium"
+                      : checked[i]
+                      ? "text-muted-foreground line-through"
+                      : "text-foreground"
+                  }`}
+                >
+                  {i + 1}. {inst}
+                </label>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+
+      {/* Acciones */}
+      <div className="mt-10 flex flex-wrap gap-3">
+        <Button variant="outline" onClick={onBack} className="h-12 px-6 text-base">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Atrás
+        </Button>
+        <Button onClick={handleExportPDF} className="h-12 px-8 text-base font-medium">
+          <Download className="mr-2 h-4 w-4" />
+          Exportar PDF
+        </Button>
+        <Button variant="outline" onClick={onReset} className="h-12 px-6 text-base">
+          <RotateCcw className="mr-2 h-4 w-4" />
+          Nuevo diseño
+        </Button>
+      </div>
+    </div>
+  );
+}
