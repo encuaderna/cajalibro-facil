@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import AccessibilityToolbar from "@/components/AccessibilityToolbar";
+import MaterialLibrary from "@/components/box-designer/MaterialLibrary";
 import StepIndicator from "@/components/box-designer/StepIndicator";
 import StepDimensions from "@/components/box-designer/StepDimensions";
 import StepBoxType from "@/components/box-designer/StepBoxType";
@@ -45,20 +46,25 @@ export default function Home() {
       <AccessibilityToolbar />
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
         {/* Header */}
-        <header className="mb-10 flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
-              Diseño Técnico de Cajas
-            </h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              Calculadora de piezas para cajas de libros a medida
-            </p>
+        <header className="mb-10">
+          <div className="flex items-start justify-between mb-3">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+                Diseño Técnico de Cajas
+              </h1>
+              <p className="text-muted-foreground text-sm mt-1">
+                Calculadora de piezas para cajas de libros a medida
+              </p>
+            </div>
+            <Link to="/mis-proyectos">
+              <Button variant="outline" size="sm" className="whitespace-nowrap">
+                📁 Mis Proyectos
+              </Button>
+            </Link>
           </div>
-          <Link to="/mis-proyectos">
-            <Button variant="outline" size="sm" className="whitespace-nowrap">
-              📁 Mis Proyectos
-            </Button>
-          </Link>
+          <div className="flex gap-2">
+            <MaterialLibrary />
+          </div>
         </header>
 
         <StepIndicator currentStep={step} />

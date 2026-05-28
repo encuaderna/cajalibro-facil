@@ -1,0 +1,27 @@
+{
+  "name": "Material",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nombre del material"
+    },
+    "thickness": {
+      "type": "number",
+      "description": "Espesor en mm"
+    },
+    "pricePerSquareMeter": {
+      "type": "number",
+      "description": "Precio por metro cuadrado en \u20ac"
+    },
+    "supplier": {
+      "type": "string",
+      "description": "Nombre del proveedor"
+    }
+  },
+  "required": [
+    "name",
+    "thickness",
+    "pricePerSquareMeter"
+  ]
+}
