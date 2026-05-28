@@ -6,6 +6,7 @@ import { calculatePieces, getInstructions } from "@/lib/boxCalculations";
 import PieceDiagram from "@/components/box-designer/PieceDiagram";
 import BoxSchemaSVG from "@/components/box-designer/BoxSchemaSVG";
 import BoxViewer3D from "@/components/box-designer/BoxViewer3D";
+import SheetOptimizer from "@/components/box-designer/SheetOptimizer";
 import jsPDF from "jspdf";
 
 export default function StepResults({
@@ -187,6 +188,11 @@ export default function StepResults({
         <p className="text-xs text-muted-foreground mt-2 pl-1">
           Haz clic en una fila para ver el diagrama de esa pieza.
         </p>
+      </div>
+
+      {/* ── Optimización de corte ── */}
+      <div className="mt-6">
+        <SheetOptimizer pieces={pieces} />
       </div>
 
       {/* Instrucciones */}
