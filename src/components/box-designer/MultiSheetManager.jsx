@@ -11,7 +11,7 @@ function colorFor(idx) {
   return PALETTE[idx % PALETTE.length];
 }
 
-export default function MultiSheetManager({ pieces, sheetW = 1000, sheetH = 700 }) {
+export default function MultiSheetManager({ pieces, sheetW = 1000, sheetH = 700, onSheetsChange }) {
   const [open, setOpen] = useState(false);
   const [selectedSheet, setSelectedSheet] = useState(0);
 
@@ -69,7 +69,7 @@ export default function MultiSheetManager({ pieces, sheetW = 1000, sheetH = 700 
       });
     }
 
-    return sheetList.length > 0 ? sheetList : [{
+    const finalSheets = sheetList.length > 0 ? sheetList : [{
       id: 0,
       pieces: result.placed.map((p, i) => ({
         ...p,
@@ -80,7 +80,11 @@ export default function MultiSheetManager({ pieces, sheetW = 1000, sheetH = 700 
       usedArea: result.usedArea,
       efficiency: result.efficiency,
     }];
-  }, [pieces, sheetW, sheetH]);
+
+    // Notificar al padre sobre las láminas generadas
+    onSheetsChange?.(finalSheets);
+    return finalSheets;
+  }, [pieces, sheetW, sheetH, onSheetsChange]);
 
   const totalSheets = sheets.length;
   const totalArea = sheets.reduce((sum, s) => sum + s.usedArea, 0);

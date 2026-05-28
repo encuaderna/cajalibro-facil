@@ -12,6 +12,7 @@ import SaveProjectDialog from "@/components/box-designer/SaveProjectDialog";
 import InteractiveSheetLayout from "@/components/box-designer/InteractiveSheetLayout";
 import MultiSheetManager from "@/components/box-designer/MultiSheetManager";
 import jsPDF from "jspdf";
+import { exportLayoutPdf } from "@/lib/exportPdfLayout";
 
 export default function StepResults({
   dimensions,
@@ -35,6 +36,7 @@ export default function StepResults({
   );
   const [selectedPieceIndex, setSelectedPieceIndex] = useState(0);
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [sheets, setSheets] = useState([]);
 
   const toggleCheck = (i) => {
     setChecked((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
@@ -197,7 +199,7 @@ export default function StepResults({
 
       {/* ── Distribución en múltiples láminas ── */}
       <div className="mt-6">
-        <MultiSheetManager pieces={pieces} />
+        <MultiSheetManager pieces={pieces} onSheetsChange={setSheets} />
       </div>
 
       {/* ── Optimización de corte ── */}
@@ -260,9 +262,22 @@ export default function StepResults({
         <Button onClick={() => setSaveDialogOpen(true)} className="h-12 px-8 text-base font-medium bg-primary/90 hover:bg-primary">
           💾 Guardar proyecto
         </Button>
-        <Button onClick={handleExportPDF} className="h-12 px-8 text-base font-medium">
+        <Button 
+          onClick={handleExportPDF} 
+          className="h-12 px-8 text-base font-medium"
+          title="Exporta PDF de corte técnico"
+        >
           <Download className="mr-2 h-4 w-4" />
-          Exportar PDF
+          PDF de corte
+        </Button>
+        <Button 
+          onClick={() => sheets.length > 0 && exportLayoutPdf(sheets, pieces, 1000, 700)}
+          disabled={sheets.length === 0}
+          className="h-12 px-8 text-base font-medium"
+          title="Exporta PDF con layout de láminas"
+        >
+          <Download className="mr-2 h-4 w-4" />
+          PDF layout
         </Button>
         <Button variant="outline" onClick={onReset} className="h-12 px-6 text-base">
           <RotateCcw className="mr-2 h-4 w-4" />
