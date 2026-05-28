@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AccessibilityToolbar from "@/components/AccessibilityToolbar";
 import StepIndicator from "@/components/box-designer/StepIndicator";
 import StepDimensions from "@/components/box-designer/StepDimensions";
 import StepBoxType from "@/components/box-designer/StepBoxType";
@@ -22,6 +23,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AccessibilityToolbar />
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
         {/* Header */}
         <header className="mb-10">
