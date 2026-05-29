@@ -11,6 +11,7 @@ import CostEstimator from "@/components/box-designer/CostEstimator";
 import SaveProjectDialog from "@/components/box-designer/SaveProjectDialog";
 import InteractiveSheetLayout from "@/components/box-designer/InteractiveSheetLayout";
 import MultiSheetManager from "@/components/box-designer/MultiSheetManager";
+import ExportReportDialog from "@/components/box-designer/ExportReportDialog";
 import jsPDF from "jspdf";
 import { exportLayoutPdf } from "@/lib/exportPdfLayout";
 
@@ -279,6 +280,13 @@ export default function StepResults({
           <Download className="mr-2 h-4 w-4" />
           PDF layout
         </Button>
+        <ExportReportDialog
+          pieces={pieces}
+          dimensions={dimensions}
+          boxType={boxType}
+          material={material}
+          needsAngleCut={needsAngleCut}
+        />
         <Button variant="outline" onClick={onReset} className="h-12 px-6 text-base">
           <RotateCcw className="mr-2 h-4 w-4" />
           Nuevo diseño
