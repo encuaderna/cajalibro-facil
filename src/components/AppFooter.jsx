@@ -18,6 +18,11 @@ const APPS = [
     url: "https://print-masked-flow-pro.base44.app",
     icon: "🖨️",
   },
+  {
+    name: "EncuaTaller",
+    url: "https://bind-build-lab.base44.app",
+    icon: "🔧",
+  },
 ];
 
 export default function AppFooter() {
