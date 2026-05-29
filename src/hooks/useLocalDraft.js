@@ -36,7 +36,7 @@ export function hasDraft() {
 }
 
 /**
- * Hook que auto-guarda el borrador cada vez que cambia step/dimensions/boxType/material.
+ * Hook que auto-guarda el borrador cada 3 segundos.
  * Sólo guarda si hay algo útil (paso > 1 o alguna dimensión > 0).
  */
 export function useAutoSaveDraft({ step, dimensions, boxType, material }) {
@@ -47,8 +47,16 @@ export function useAutoSaveDraft({ step, dimensions, boxType, material }) {
       dimensions.ancho > 0 ||
       dimensions.profundidad > 0;
 
-    if (hasData) {
+    if (!hasData) return;
+
+    // Guardar inmediatamente al montar
+    saveDraft({ step, dimensions, boxType, material });
+
+    // Luego guardar cada 3 segundos
+    const interval = setInterval(() => {
       saveDraft({ step, dimensions, boxType, material });
-    }
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, [step, dimensions, boxType, material]);
 }
