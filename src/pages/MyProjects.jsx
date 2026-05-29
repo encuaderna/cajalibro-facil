@@ -13,8 +13,9 @@ import {
   AlertDialogTitle,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Trash2, Play, Loader2, FolderOpen, Clock } from "lucide-react";
+import { ArrowLeft, Trash2, Play, Loader2, FolderOpen, Copy } from "lucide-react";
 import RevisionHistory from "@/components/box-designer/RevisionHistory";
+import DuplicateProjectButton from "@/components/box-designer/DuplicateProjectButton";
 
 export default function MyProjects() {
   const navigate = useNavigate();
@@ -160,6 +161,10 @@ export default function MyProjects() {
                     <RevisionHistory
                       projectId={project.id}
                       onRestore={(data) => handleRestoreRevision(project.id, data)}
+                    />
+                    <DuplicateProjectButton
+                      project={project}
+                      onDuplicated={loadProjects}
                     />
                     <Button
                       onClick={() => setDeleteId(project.id)}

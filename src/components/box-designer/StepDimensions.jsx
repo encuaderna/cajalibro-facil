@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import BookSizePresets from "@/components/box-designer/BookSizePresets";
 
 const fields = [
   { key: "alto", label: "Alto del libro (mm)", placeholder: "Ej: 240" },
@@ -24,11 +25,13 @@ export default function StepDimensions({ dimensions, onChange, onNext }) {
       <h2 className="text-xl font-semibold text-foreground mb-2">
         Paso 1 — Dimensiones del libro
       </h2>
-      <p className="text-muted-foreground text-sm mb-8">
-        Introduce las medidas del libro en milímetros.
+      <p className="text-muted-foreground text-sm mb-6">
+        Introduce las medidas del libro en milímetros, o elige un formato estándar.
       </p>
 
-      <div className="space-y-6 max-w-md">
+      <BookSizePresets onSelect={onChange} />
+
+      <div className="space-y-5 max-w-md">
         {fields.map((f) => (
           <div key={f.key} className="space-y-2">
             <Label htmlFor={f.key} className="text-sm font-medium text-foreground">
@@ -42,8 +45,13 @@ export default function StepDimensions({ dimensions, onChange, onNext }) {
               placeholder={f.placeholder}
               value={dimensions[f.key] || ""}
               onChange={(e) => handleChange(f.key, e.target.value)}
-              className="h-12 text-base bg-secondary border-border text-foreground placeholder:text-muted-foreground"
+              className={`h-12 text-base bg-secondary border-border text-foreground placeholder:text-muted-foreground transition-colors ${
+                dimensions[f.key] > 0 ? "border-primary/40" : ""
+              }`}
             />
+            {dimensions[f.key] === 0 && (
+              <p className="text-xs text-muted-foreground">Introduce un valor mayor que 0</p>
+            )}
           </div>
         ))}
       </div>
@@ -57,6 +65,9 @@ export default function StepDimensions({ dimensions, onChange, onNext }) {
           Siguiente
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
+        {!allValid && (
+          <p className="text-xs text-muted-foreground mt-2">Completa los tres campos para continuar.</p>
+        )}
       </div>
     </div>
   );

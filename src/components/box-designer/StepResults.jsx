@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Download, AlertTriangle, RotateCcw } from "lucide-react";
+import AssemblyProgress from "@/components/box-designer/AssemblyProgress";
 import { calculatePieces, getInstructions } from "@/lib/boxCalculations";
 import PieceDiagram from "@/components/box-designer/PieceDiagram";
 import BoxSchemaSVG from "@/components/box-designer/BoxSchemaSVG";
@@ -227,9 +228,10 @@ export default function StepResults({
 
       {/* Instrucciones */}
       <div className="mt-10">
-        <h3 className="text-lg font-semibold text-foreground mb-4">
+        <h3 className="text-lg font-semibold text-foreground mb-3">
           Instrucciones de montaje
         </h3>
+        <AssemblyProgress checked={checked} total={instructions.length} />
         <ol className="space-y-3">
           {instructions.map((inst, i) => {
             const isAlert = inst.startsWith("ALERTA");

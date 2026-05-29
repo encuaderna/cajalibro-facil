@@ -13,6 +13,8 @@ import StepResults from "@/components/box-designer/StepResults";
 import { useAppPreferences } from "@/hooks/useAppPreferences";
 import { loadDraft, clearDraft, hasDraft, useAutoSaveDraft } from "@/hooks/useLocalDraft";
 import DraftRestoreBanner from "@/components/box-designer/DraftRestoreBanner";
+import SummaryBar from "@/components/box-designer/SummaryBar";
+import GuidedTour from "@/components/box-designer/GuidedTour";
 
 const INITIAL_DIMENSIONS = { alto: 0, ancho: 0, profundidad: 0 };
 
@@ -117,8 +119,9 @@ export default function Home() {
               </Button>
             </Link>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
             <MaterialLibrary />
+            <GuidedTour />
           </div>
         </header>
 
@@ -128,6 +131,12 @@ export default function Home() {
           onDiscard={handleDiscardDraft}
         />
 
+        <SummaryBar
+          step={step}
+          dimensions={dimensions}
+          boxType={boxType}
+          material={material}
+        />
         <StepIndicator currentStep={step} />
 
         {step === 1 && (
