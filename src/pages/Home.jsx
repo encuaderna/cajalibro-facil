@@ -15,6 +15,7 @@ import { loadDraft, clearDraft, hasDraft, useAutoSaveDraft } from "@/hooks/useLo
 import DraftRestoreBanner from "@/components/box-designer/DraftRestoreBanner";
 import SummaryBar from "@/components/box-designer/SummaryBar";
 import GuidedTour from "@/components/box-designer/GuidedTour";
+import AppFooter from "@/components/AppFooter";
 
 const INITIAL_DIMENSIONS = { alto: 0, ancho: 0, profundidad: 0 };
 
@@ -181,6 +182,7 @@ export default function Home() {
           />
         )}
       </div>
+      <AppFooter />
     </div>
   );
 }
