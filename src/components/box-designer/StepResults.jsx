@@ -14,6 +14,7 @@ import MultiSheetManager from "@/components/box-designer/MultiSheetManager";
 import ExportReportDialog from "@/components/box-designer/ExportReportDialog";
 import SnapshotManager from "@/components/box-designer/SnapshotManager";
 import PhotoCarousel from "@/components/box-designer/PhotoCarousel";
+import PrintTemplateButton from "@/components/box-designer/PrintTemplateButton";
 import jsPDF from "jspdf";
 import { exportLayoutPdf } from "@/lib/exportPdfLayout";
 
@@ -292,6 +293,12 @@ export default function StepResults({
           boxType={boxType}
           material={material}
           needsAngleCut={needsAngleCut}
+        />
+        <PrintTemplateButton
+          pieces={pieces}
+          dimensions={dimensions}
+          boxType={boxType}
+          material={material}
         />
         <SnapshotManager
           dimensions={dimensions}
