@@ -16,6 +16,8 @@ import ExportReportDialog from "@/components/box-designer/ExportReportDialog";
 import SnapshotManager from "@/components/box-designer/SnapshotManager";
 import PhotoCarousel from "@/components/box-designer/PhotoCarousel";
 import PrintTemplateButton from "@/components/box-designer/PrintTemplateButton";
+import PreFabricationChecklist from "@/components/box-designer/PreFabricationChecklist";
+import FavoritesManager from "@/components/box-designer/FavoritesManager";
 import jsPDF from "jspdf";
 import { exportLayoutPdf } from "@/lib/exportPdfLayout";
 
@@ -249,6 +251,19 @@ export default function StepResults({
       <div className="mt-4">
         <InteractiveSheetLayout pieces={pieces} sheetW={1000} sheetH={700} />
       </div>
+
+      {/* ── Checklist Pre-Fabricación ── */}
+      <PreFabricationChecklist />
+
+      {/* ── Historial de Favoritos ── */}
+      <FavoritesManager
+        dimensions={dimensions}
+        boxType={boxType}
+        material={material}
+        onLoad={(data) => {
+          onRestore(data);
+        }}
+      />
 
       {/* Instrucciones */}
       <div className="mt-10">
