@@ -102,6 +102,30 @@ export default function StepResults({
       y += 8;
     }
 
+    y += 10;
+    doc.setFontSize(11);
+    doc.text("Consejos de Fabricación", 15, y);
+    y += 8;
+
+    doc.setFontSize(9);
+    const tips = [
+      "• Verifica todas las dimensiones con calibre antes de cortar.",
+      "• Mantén el material a 20-25°C y 45-55% humedad para evitar deformaciones.",
+      "• Aplica pegamento de forma uniforme; usa rodillo o brocha para distribuir sin aire.",
+      "• Deja secar bajo presión (prensa o peso) durante 24h mínimo.",
+      "• En cortes a 45°, realiza múltiples pasadas ligeras en lugar de una profunda.",
+      "• Protege aristas sobresalientes con refuerzo o bisel tras montaje."
+    ];
+    tips.forEach((tip) => {
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
+      const lines = doc.splitTextToSize(tip, pageWidth - 30);
+      doc.text(lines, 15, y);
+      y += lines.length * 4 + 1;
+    });
+
     y += 6;
     doc.setFontSize(11);
     doc.text("Instrucciones de Montaje", 15, y);
