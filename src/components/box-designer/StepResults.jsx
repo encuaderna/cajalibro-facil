@@ -18,6 +18,8 @@ import PhotoCarousel from "@/components/box-designer/PhotoCarousel";
 import PrintTemplateButton from "@/components/box-designer/PrintTemplateButton";
 import PreFabricationChecklist from "@/components/box-designer/PreFabricationChecklist";
 import FavoritesManager from "@/components/box-designer/FavoritesManager";
+import MaterialComparisonTable from "@/components/box-designer/MaterialComparisonTable";
+import CriticalAlertsPanel from "@/components/box-designer/CriticalAlertsPanel";
 import jsPDF from "jspdf";
 import { exportLayoutPdf } from "@/lib/exportPdfLayout";
 
@@ -157,15 +159,12 @@ export default function StepResults({
         &nbsp;·&nbsp; {boxType.name} &nbsp;·&nbsp; {material.name} ({material.thickness} mm)
       </p>
 
-      {needsAngleCut && (
-        <div className="flex items-start gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/30 mt-4 mb-6">
-          <AlertTriangle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
-          <p className="text-sm text-destructive">
-            El grosor del material ({material.thickness} mm) supera los 3 mm.
-            Se requiere corte a 45° en todas las aristas de unión.
-          </p>
-        </div>
-      )}
+      {/* ── Panel de Alertas Críticas ── */}
+      <CriticalAlertsPanel
+        dimensions={dimensions}
+        material={material}
+        needsAngleCut={needsAngleCut}
+      />
 
       {/* ── Visor 3D ── */}
       <div className="mt-6">
@@ -241,6 +240,9 @@ export default function StepResults({
       <div className="mt-4">
         <SheetOptimizer pieces={pieces} />
       </div>
+
+      {/* ── Tabla Comparativa de Materiales ── */}
+      <MaterialComparisonTable />
 
       {/* ── Estimación de coste ── */}
       <div className="mt-4">
