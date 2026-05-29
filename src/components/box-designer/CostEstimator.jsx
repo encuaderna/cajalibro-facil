@@ -1,10 +1,27 @@
 import React, { useState, useMemo } from "react";
-import { Calculator } from "lucide-react";
-import { ChevronDown } from "lucide-react";
+import { Calculator, ChevronDown } from "lucide-react";
+
+const CURRENCIES = [
+  { code: "EUR", symbol: "€", name: "Euro" },
+  { code: "USD", symbol: "$", name: "Dólar (USD)" },
+  { code: "GBP", symbol: "£", name: "Libra (GBP)" },
+  { code: "MXN", symbol: "$", name: "Peso mexicano" },
+  { code: "ARS", symbol: "$", name: "Peso argentino" },
+  { code: "CLP", symbol: "$", name: "Peso chileno" },
+  { code: "COP", symbol: "$", name: "Peso colombiano" },
+  { code: "BRL", symbol: "R$", name: "Real brasileño" },
+  { code: "JPY", symbol: "¥", name: "Yen japonés" },
+  { code: "CNY", symbol: "¥", name: "Yuan chino" },
+  { code: "INR", symbol: "₹", name: "Rupia india" },
+  { code: "CHF", symbol: "Fr", name: "Franco suizo" },
+];
 
 export default function CostEstimator({ pieces }) {
   const [open, setOpen] = useState(false);
   const [pricePerM2, setPricePerM2] = useState(12);
+  const [currency, setCurrency] = useState("EUR");
+
+  const selectedCurrency = CURRENCIES.find((c) => c.code === currency) || CURRENCIES[0];
 
   // Área total en mm² → m²
   const totalAreaM2 = useMemo(() => {
@@ -34,11 +51,29 @@ export default function CostEstimator({ pieces }) {
       {open && (
         <div id="cost-estimator-body" className="p-4 space-y-5">
 
+          {/* Selector de moneda */}
+          <div className="flex items-center gap-2">
+            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide whitespace-nowrap">
+              Moneda
+            </label>
+            <select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              className="h-9 rounded-md border border-input bg-secondary px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            >
+              {CURRENCIES.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.symbol} {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Área total */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             <Stat label="Área total de piezas" value={`${totalAreaM2.toFixed(4)} m²`} />
-            <Stat label="Precio por m²" value={`${pricePerM2.toFixed(2)} €`} />
-            <Stat label="Coste estimado" value={`${totalCost} €`} highlight />
+            <Stat label="Precio por m²" value={`${selectedCurrency.symbol}${pricePerM2.toFixed(2)}`} />
+            <Stat label="Coste estimado" value={`${selectedCurrency.symbol}${totalCost}`} highlight />
           </div>
 
           {/* Control de precio */}
@@ -47,7 +82,7 @@ export default function CostEstimator({ pieces }) {
               htmlFor="price-input"
               className="text-xs font-medium text-muted-foreground uppercase tracking-wide"
             >
-              Precio del material (€ / m²)
+              Precio del material ({selectedCurrency.symbol} / m²)
             </label>
             <div className="flex items-center gap-3">
               <input
@@ -71,7 +106,7 @@ export default function CostEstimator({ pieces }) {
                 }}
                 className="w-24 h-9 rounded-md border border-input bg-secondary px-3 text-sm text-foreground text-right font-mono focus:outline-none focus:ring-1 focus:ring-ring"
               />
-              <span className="text-sm text-muted-foreground">€/m²</span>
+              <span className="text-sm text-muted-foreground">{selectedCurrency.symbol}/m²</span>
             </div>
           </div>
 
@@ -102,7 +137,7 @@ export default function CostEstimator({ pieces }) {
                         {unitArea.toFixed(4)} m²
                       </td>
                       <td className="py-2 px-2 text-right font-mono text-foreground">
-                        {subCost} €
+                        {selectedCurrency.symbol}{subCost}
                       </td>
                     </tr>
                   );
@@ -114,7 +149,7 @@ export default function CostEstimator({ pieces }) {
                     Total
                   </td>
                   <td className="py-2 px-2 text-right font-semibold font-mono text-primary">
-                    {totalCost} €
+                    {selectedCurrency.symbol}{totalCost}
                   </td>
                 </tr>
               </tfoot>
