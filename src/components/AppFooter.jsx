@@ -4,17 +4,17 @@ import { ExternalLink } from "lucide-react";
 
 const APPS = [
   {
-    name: "Bind - Calm Create",
+    name: "Bitácora de Encuadernación",
     url: "https://bind-calm-create.base44.app",
     icon: "📚",
   },
   {
-    name: "Bind - Craft Calm",
+    name: "Encuadernación Artesanal",
     url: "https://bind-craft-calm.base44.app",
     icon: "🎨",
   },
   {
-    name: "Print - Masked Flow Pro",
+    name: "ImpoSimple",
     url: "https://print-masked-flow-pro.base44.app",
     icon: "🖨️",
   },
