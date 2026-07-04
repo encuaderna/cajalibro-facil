@@ -1,39 +1,25 @@
-**Welcome to your Base44 project** 
+# CajaLibro Facil
 
-**About**
+**Calculadora tecnica para diseno de cajas de libros** — herramienta precisa para dimensionar cajas protectoras artesanales de forma rapida y sin errores.
 
-View and Edit  your app on [Base44.com](http://Base44.com) 
+## Que hace esta app
 
-This project contains everything you need to run your app locally.
+- Calcula las medidas exactas para construir cajas de libros (estuches, cajas clamshell, etc.)
+- Solo ingresas las medidas de tu libro y la app genera todos los cortes
+- Incluye opciones de accesibilidad: fuente para dislexia, alto contraste, modo enfoque
+- Ideal para principiantes y encuadernadores con experiencia
 
-**Edit the code in your local development environment**
+## Como usarla
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+Haz clic en el siguiente enlace y empieza directamente en el navegador, sin instalar nada:
 
-**Prerequisites:** 
+**Abrir app:** https://box-craft-logic.base44.app
 
-1. Clone the repository using the project's Git URL 
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
+## Para quien es
 
-```
-VITE_BASE44_APP_ID=your_app_id
-VITE_BASE44_APP_BASE_URL=your_backend_url
+Para quienes encuadernan artesanalmente y quieren construir cajas protectoras para sus libros sin calcular a mano.
 
-e.g.
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://my-to-do-list-81bfaad7.base44.app
-```
+---
 
-Run the app: `npm run dev`
-
-**Publish your changes**
-
-Open [Base44.com](http://Base44.com) and click on Publish.
-
-**Docs & Support**
-
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
-
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+*Creada con entusiasmo por [Artesana Dominguera](https://github.com/encuaderna)*
+*Ver todas las apps: https://encuaderna.github.io/encuaderna-apps/*
